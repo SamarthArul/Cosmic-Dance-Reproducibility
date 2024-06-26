@@ -18,7 +18,8 @@ def plot(df_nt: pd.DataFrame, df_tles: pd.DataFrame, ldate: pd.Timestamp) -> str
 
 
 if __name__ == '__main__':
-    PLOT_OUTPUT_DIR = '/mnt/Storage/OUTPUTs/VIEW/RAW_LDATE'
+    # PLOT_OUTPUT_DIR = '/mnt/Storage/OUTPUTs/VIEW/RAW_LDATE'
+    PLOT_OUTPUT_DIR = '/mnt/Storage/OUTPUTs/VIEW/VALIDATE'
 
     DST_CSV = '/home/suvam/Projects/CosmicDance/CSVs/Dst_index.csv'
     TLE_DIR_CSV = '/mnt/Storage/OUTPUTs/TLEs'

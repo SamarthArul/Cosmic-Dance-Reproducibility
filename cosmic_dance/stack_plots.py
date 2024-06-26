@@ -14,8 +14,8 @@ def _get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp):
     date_marks.append(sdate)
 
     while sdate <= edate:
-        # sdate = sdate+timedelta(weeks=4)
-        sdate = sdate+timedelta(days=1)
+        sdate = sdate+timedelta(weeks=4)
+        # sdate = sdate+timedelta(days=1)
         date_marks.append(sdate)
 
     return date_marks
