@@ -1,6 +1,6 @@
-import sys
 import csv
 import os
+import sys
 from datetime import timedelta
 
 import numpy as np

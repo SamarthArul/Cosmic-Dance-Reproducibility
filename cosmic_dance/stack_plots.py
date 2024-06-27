@@ -1,8 +1,9 @@
 
+from datetime import timedelta
+
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
-from datetime import timedelta
 
 plt.rcParams["figure.figsize"] = (20, 10)
 plt.rcParams.update({'font.size': 10})
@@ -69,7 +70,7 @@ def plot_in_stack_cat_id_with_nt(
 
     if len(output_dir):
         plot_file_path = f"{output_dir}/{cat_id}.png"
-        plt.savefig(plot_file_path)
+        plt.savefig(plot_file_path, dpi=300)
         plt.close()
         return plot_file_path
     else:
@@ -125,7 +126,7 @@ def plot_in_stack_ldate_with_nt(
 
     if len(output_dir):
         plot_file_path = f"{output_dir}/{ldate}.png"
-        plt.savefig(plot_file_path)
+        plt.savefig(plot_file_path, dpi=300)
         plt.close()
         return plot_file_path
     else:
