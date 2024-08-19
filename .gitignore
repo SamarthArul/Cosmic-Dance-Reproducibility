@@ -163,3 +163,4 @@ cython_debug/
 credentials/credentials_1.json
 credentials/credentials_2.json
 credentials/credentials_3.json
+figures/*
