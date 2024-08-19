@@ -10,125 +10,138 @@ plt.rcParams.update({'font.size': 10})
 SIZE = 5
 
 
-def _get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp):
+def _get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp, time_delta: timedelta) -> list[pd.Timestamp]:
+    '''Create list of time stamps
+
+    Params
+    ------
+    sdate: pd.Timestamp
+        Start timestamp
+    edate: pd.Timestamp
+        End timestamp
+    time_delta: timedelta
+        Time interval
+
+    Returns
+    --------
+    list[pd.Timestamp]
+        List of timestamp
+    '''
     date_marks = []
     date_marks.append(sdate)
 
     while sdate <= edate:
-        sdate = sdate+timedelta(weeks=4)
-        # sdate = sdate+timedelta(days=1)
+        sdate += time_delta
         date_marks.append(sdate)
 
     return date_marks
 
 
-def plot_in_stack_cat_id_with_nt(
-        cat_id: int,
-        ldate: pd.Timestamp,
-
-        df_tles: pd.DataFrame,
-        df_nt: pd.DataFrame,
-
-        sdate: pd.Timestamp = None,
-        edate: pd.Timestamp = None,
-        output_dir: str = ''
-) -> str:
-
-    # Dates
-    if sdate is None or edate is None:
-        sdate, edate = df_tles["EPOCH"].min(), df_tles["EPOCH"].max()
-    df_nt = df_nt[df_nt["TIMESTAMP"].between(sdate, edate)]
-
-    # Plot
-    fig, axs = plt.subplots(3, 1, sharex=True)
-    axs[-1].set_xticks(_get_date_marks(sdate, edate), minor=False)
-    axs[-1].set_xticklabels(axs[-1].get_xticks(), rotation=40)
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-
-    axs[0].scatter(df_nt["TIMESTAMP"], df_nt["nT"], label='nT', s=SIZE, c='b')
-    axs[0].axhline(y=67, color='r', linestyle='--', label=f'{99}%tile')
-
-    axs[1].scatter(df_tles["EPOCH"], df_tles["KM"], label='KM', s=SIZE, c='g')
-    # axs[1].set_ylim(250, 650)
-    axs[2].scatter(df_tles["EPOCH"], df_tles["DRAG"],
-                   label='DRAG', s=SIZE, c='g')
-
-    axs[0].set_title(f"""CAT_ID: {cat_id} || Ldate: {ldate}""")
-    axs[-1].set_xlabel('Epoch')
-    axs[0].set_ylabel('nT')
-    axs[1].set_ylabel('KM')
-    axs[2].set_ylabel('DRAG')
-
-    # axs[0].legend()
-    # axs[3].legend()
-    # axs[6].legend()
-
-    for i in range(3):
-        axs[i].grid('x')
-    axs[0].legend()
-    plt.tight_layout()
-
-    if len(output_dir):
-        plot_file_path = f"{output_dir}/{cat_id}.png"
-        plt.savefig(plot_file_path, dpi=300)
-        plt.close()
-        return plot_file_path
-    else:
-        plt.show()
-        return ''
-
-
-def plot_in_stack_ldate_with_nt(
-    ldate: pd.Timestamp,
-
+def plot_in_stack_with_nt(
     df_tles: pd.DataFrame,
     df_nt: pd.DataFrame,
 
+    time_delta: timedelta,
+
+
     sdate: pd.Timestamp = None,
     edate: pd.Timestamp = None,
-    output_dir: str = ''
-) -> str:
+    title: str = None,
+    filename: str = None
+) -> str | None:
+    '''Plot time series grouped by satellite launch date NORAD_CAT_ID color coded
+
+    Params
+    ------
+    df_tles: pd.DataFrame
+        TLE DataFrame
+    df_nt: pd.DataFrame
+        Dst index DataFrame
+
+    time_delta: timedelta
+        X axis marking time interval
+
+    sdate: pd.Timestamp = None
+        Start timestamp, optional
+    edate: pd.Timestamp = None
+        End timestamp, optional
+    title: str
+        Figure title, optional
+    filename: str = ''
+        Outpur directory path, optional
+
+    Returns
+    --------
+    str
+        PNG file name
+    '''
 
     # Dates
-    if sdate is None or edate is None:
-        sdate, edate = df_tles["EPOCH"].min(), df_tles["EPOCH"].max()
-    df_nt = df_nt[df_nt["TIMESTAMP"].between(sdate, edate)]
+    if sdate is None:
+        sdate = df_tles["EPOCH"].min()
+    if edate is None:
+        edate = df_tles["EPOCH"].max()
 
     # Plot
     fig, axs = plt.subplots(3, 1, sharex=True)
-    axs[-1].set_xticks(_get_date_marks(sdate, edate), minor=False)
+
+    # Dst Index
+    axs[0].scatter(
+        df_nt["TIMESTAMP"], df_nt["nT"],
+
+        label='nT',
+        s=SIZE,
+        c='b'
+    )
+    axs[0].axhline(
+        y=67,
+
+        color='r',
+        linestyle='--',
+        label=f'{99}%tile'
+    )
+
+    # Altitude
+    axs[1].scatter(
+        df_tles["EPOCH"], df_tles["KM"],
+        label='KM',
+        s=SIZE,
+        c=df_tles["NORAD_CAT_ID"]
+    )
+    axs[1].set_ylim(250, 650)
+
+    # Drag
+    axs[2].scatter(
+        df_tles["EPOCH"], df_tles["DRAG"],
+
+        label='DRAG',
+        s=SIZE,
+        c=df_tles["NORAD_CAT_ID"]
+    )
+
+    #  Timeseties (x axis marking)
+    axs[-1].set_xticks(_get_date_marks(sdate, edate, time_delta), minor=False)
     axs[-1].set_xticklabels(axs[-1].get_xticks(), rotation=40)
+    axs[-1].set_xlabel('Epoch')
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
-    axs[0].scatter(df_nt["TIMESTAMP"], df_nt["nT"], label='nT', s=SIZE, c='b')
-    axs[0].axhline(y=67, color='r', linestyle='--', label=f'{99}%tile')
+    if title:
+        axs[0].set_title(title)
 
-    axs[1].scatter(df_tles["EPOCH"], df_tles["KM"], label='KM',
-                   s=SIZE, c=df_tles["NORAD_CAT_ID"])
-    # axs[1].set_ylim(250, 650)
-    axs[2].scatter(df_tles["EPOCH"], df_tles["DRAG"],
-                   label='DRAG', s=SIZE, c=df_tles["NORAD_CAT_ID"])
-
-    axs[0].set_title(f"""Ldate: {ldate}""")
-    axs[-1].set_xlabel('Epoch')
+    # Y axis
     axs[0].set_ylabel('nT')
     axs[1].set_ylabel('KM')
     axs[2].set_ylabel('DRAG')
 
-    # axs[0].legend()
-    # axs[3].legend()
-    # axs[6].legend()
-
     for i in range(3):
         axs[i].grid('x')
     axs[0].legend()
-    plt.tight_layout()
 
-    if len(output_dir):
-        plot_file_path = f"{output_dir}/{ldate}.png"
-        plt.savefig(plot_file_path, dpi=300)
+    if len(filename):
+        plt.tight_layout()
+        # plt.savefig(plot_file_path, dpi=300)
+        plt.savefig(filename)
         plt.close()
-        return plot_file_path
+        return filename
     else:
         plt.show()
-        return ''
