@@ -1,16 +1,33 @@
 
-from datetime import timedelta
-
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 plt.rcParams["figure.figsize"] = (20, 10)
-plt.rcParams.update({'font.size': 10})
+plt.rcParams.update({'font.size': 20})
 SIZE = 5
 
 
-def _get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp, time_delta: timedelta) -> list[pd.Timestamp]:
+def get_CDF(data: pd.Series) -> tuple[np.array, np.array]:
+    '''Get X and Y axis values for Cumulative distribution function
+
+    Params
+    ------
+    data: pd.Series
+        List of data points
+
+    Returns
+    -------
+    tuple[np.array, np.array] X and Y axis values
+    '''
+
+    x = np.sort(data)
+    y = np.arange(len(data)) / float(len(data))
+    return x, y
+
+
+def get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp, time_delta: pd.Timedelta) -> list[pd.Timestamp]:
     '''Create list of time stamps
 
     Params
@@ -19,7 +36,7 @@ def _get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp, time_delta: timede
         Start timestamp
     edate: pd.Timestamp
         End timestamp
-    time_delta: timedelta
+    time_delta: pd.Timedelta
         Time interval
 
     Returns
@@ -27,9 +44,10 @@ def _get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp, time_delta: timede
     list[pd.Timestamp]
         List of timestamp
     '''
-    date_marks = []
-    date_marks.append(sdate)
 
+    date_marks: list[pd.Timestamp] = []
+
+    date_marks.append(sdate)
     while sdate <= edate:
         sdate += time_delta
         date_marks.append(sdate)
@@ -41,7 +59,7 @@ def plot_in_stack_with_nt(
     df_tles: pd.DataFrame,
     df_nt: pd.DataFrame,
 
-    time_delta: timedelta,
+    time_delta: pd.Timedelta,
 
 
     sdate: pd.Timestamp = None,
@@ -58,7 +76,7 @@ def plot_in_stack_with_nt(
     df_nt: pd.DataFrame
         Dst index DataFrame
 
-    time_delta: timedelta
+    time_delta: pd.Timedelta
         X axis marking time interval
 
     sdate: pd.Timestamp = None
@@ -67,7 +85,7 @@ def plot_in_stack_with_nt(
         End timestamp, optional
     title: str
         Figure title, optional
-    filename: str = ''
+    filename: str, optional
         Outpur directory path, optional
 
     Returns
@@ -120,7 +138,7 @@ def plot_in_stack_with_nt(
     )
 
     #  Timeseties (x axis marking)
-    axs[-1].set_xticks(_get_date_marks(sdate, edate, time_delta), minor=False)
+    axs[-1].set_xticks(get_date_marks(sdate, edate, time_delta), minor=False)
     axs[-1].set_xticklabels(axs[-1].get_xticks(), rotation=40)
     axs[-1].set_xlabel('Epoch')
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))

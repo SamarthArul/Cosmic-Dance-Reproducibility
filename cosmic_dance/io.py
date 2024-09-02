@@ -1,9 +1,115 @@
 
+import csv
 import json
 import os
 
 import pandas as pd
 import requests
+
+
+def remove_file(filename: str):
+    '''Read CSV file as Dataframe
+
+    Params
+    ------
+    filename: str
+        Path to the file
+    '''
+
+    os.remove(filename)
+
+
+def write_CSV(df: pd.DataFrame, filename: str):
+    '''Write CSV file from Dataframe
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame to be written
+    filename: str
+        CSV filename
+    '''
+
+    df.to_csv(filename, index=False)
+
+
+def read_CSV(filename: str, remove_nan: bool = True) -> pd.DataFrame:
+    '''Read CSV file as Dataframe
+
+    Params
+    ------
+    filename: str
+        Path to CSV file
+    remove_nan: bool, optional
+        Remove nan values
+
+    Returns
+    -------
+    pd.DataFrame
+    '''
+
+    df = pd.read_csv(filename)
+
+    if remove_nan:
+        return df.dropna()
+    else:
+        return df
+
+
+def get_file_names(directory_name: str) -> list[str]:
+    '''Get the sorted list of filenames inside given directory
+
+    Params
+    ------
+    directory_name: str
+        Directory (path)
+
+    Returns
+    -------
+    list[str]: list of filenames
+
+    '''
+
+    return sorted(os.listdir(directory_name))
+
+
+def read_JSON_file(filename: str) -> dict[str, int | float]:
+    '''Read JSON file
+
+    Params
+    ------
+    filename: str
+        JSON file
+
+    Returns
+    -------
+    dict[str, int | float]: dictionary
+    '''
+
+    with open(filename) as json_file:
+        return json.loads(json_file.read())
+
+
+def CSV_logger(data: dict[str, float | int], csv_file_path: str = "log.csv"):
+    '''Write CSV file from dict dataset
+
+    Parameters
+    ---------
+    data: dict[str, float | int]
+        Dataset in dict format (Key, value pair only)
+
+    csv_file_path: str, optional
+        CSV file name, default value is `log.csv`
+    '''
+
+    if not os.path.exists(csv_file_path):
+        with open(csv_file_path, 'w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=data.keys())
+            writer.writeheader()
+
+    with open(csv_file_path, 'a', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=data.keys())
+        writer.writerow(data)
 
 
 def fetch_from_space_track_API(
@@ -162,6 +268,7 @@ def fetch_from_url(url: str) -> str:
     -------
     str: content as string
     '''
+
     response = requests.get(url)
     assert response.ok
     return response.text
@@ -177,5 +284,6 @@ def export_as_csv(df: pd.DataFrame, filename: str):
     filename: str
         Filename including path
     '''
+
     df.to_csv(filename, index=False)
     print(f"|- Save file: {filename}")
