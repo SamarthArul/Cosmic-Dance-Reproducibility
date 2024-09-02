@@ -8,9 +8,8 @@ Auto fetch all the Dst index value from Geomagnetic Equatorial Dst index Home Pa
 '''
 
 
-import urllib.request
-
-import pandas as pd
+from cosmic_dance.dst_index import *
+from cosmic_dance.io import *
 
 
 # Month wise URLS
@@ -84,43 +83,11 @@ urls = [
 
 if __name__ == '__main__':
 
-    # OUTPUT CSV file
+    # OUTPUT CSV filename
     OUTPUT_FILE = "artifacts/DST/Dst_index.csv"
 
-    Dst_index_records = []
-    for id, url in enumerate(urls):
-        print(f"|- ({id+1}/{len(urls)}): {url}")
+    input(f"Confirm output file ({OUTPUT_FILE})? ")
 
-        # Fetch the text from URL
-        with urllib.request.urlopen(url) as response:
-            content = response.read().decode()
-
-            # Parse the content
-            content = content.split('\n')[:-3]
-
-            for line in content:
-
-                # Extract Year, Month, Date
-                yy = line[3:5]
-                mm = line[5:7]
-                dd = line[8:10]
-
-                # Extract hourly value with timestamp
-                h = 0
-                for index in range(20, 116, 4):
-                    date = pd.to_datetime(
-                        f"20{yy}-{mm}-{dd} {str(h).rjust(2, '0')}:00:00"
-                    )
-                    nT = int(line[index:index+4].strip())
-
-                    h += 1
-
-                    # print(date, nT)
-                    Dst_index_records.append({
-                        'TIMESTAMP': date,
-                        'nT': nT
-                    })
-
-    # Export to CSV file
-    df = pd.DataFrame.from_dict(Dst_index_records)
-    df.to_csv(OUTPUT_FILE, index=False)
+    # Parse the dataset and save into CSV
+    df_dst_index = parse_dst_index(urls)
+    export_as_csv(df_dst_index, OUTPUT_FILE)
