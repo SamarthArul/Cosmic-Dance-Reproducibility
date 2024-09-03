@@ -1,9 +1,28 @@
 import csv
 import json
 import os
+import shutil
 
 import pandas as pd
 import requests
+
+
+def create_directories(*directories: tuple[str]):
+    '''Create/recreate directories
+
+    Params
+    ------
+    directories: tuple[str]
+        Name of directories
+    '''
+
+    for directory in directories:
+
+        if os.path.exists(directory):
+            input(f"DELETE {directory} ?")
+            shutil.rmtree(directory)
+
+        os.makedirs(directory)
 
 
 def get_records_by_date(df: pd.DataFrame, column_name: str, date: pd.Timestamp) -> pd.DataFrame:
