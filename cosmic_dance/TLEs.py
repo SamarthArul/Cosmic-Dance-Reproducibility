@@ -42,6 +42,71 @@ class TLE:
     LINE2 = "TLE_LINE2"
 
 
+def get_median_altitude(df: pd.DataFrame, end_date: pd.Timestamp = None) -> float:
+    '''Calculate the median altitude from the TLEs upto given date
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    end_date: pd.Timestamp, optional
+        Consider upto Timestamp (Default includes all TLEs)
+
+    Returns
+    -------
+    float: median altitude in KM
+    '''
+
+    if end_date is not None:
+        df = df[df[TLE.EPOCH] < end_date]
+
+    return df[TLE.ALTITUDE_KM].median()
+
+
+def get_first_TLE_after_the_date(df: pd.DataFrame, date: pd.Timestamp) -> dict[str, float] | None:
+    '''Query the immediate first TLE after the given date
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    date: pd.Timestamp
+        Timestamp of the event
+
+    Returns
+    -------
+    dict of a TLEs if found else None.
+    '''
+
+    df = df[df[TLE.EPOCH] > date]
+
+    if len(df):
+        return df.iloc[0].to_dict()
+    return None
+
+
+def get_last_TLE_before_the_date(df: pd.DataFrame, date: pd.Timestamp) -> dict[str, float] | None:
+    '''Query the immediate last TLE before the given date
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    date: pd.Timestamp
+        Timestamp of the event
+
+    Returns
+    -------
+    dict of a TLEs if found else None.
+    '''
+
+    df = df[df[TLE.EPOCH] < date]
+
+    if len(df):
+        return df.iloc[-1].to_dict()
+    return None
+
+
 def get_TLEs_by_cat_id(df: pd.DataFrame, cat_id: int) -> pd.DataFrame:
     '''Query all the TLEs by NORAD Catalog Number 
 
@@ -90,6 +155,7 @@ def get_unique_launch_dates(df: pd.DataFrame) -> pd.Series:
     -------
         Series of launch dates
     '''
+
     return df[TLE.LAUNCH_DATE].unique()
 
 

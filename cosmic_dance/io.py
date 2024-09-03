@@ -1,10 +1,31 @@
-
 import csv
 import json
 import os
 
 import pandas as pd
 import requests
+
+
+def get_records_by_date(df: pd.DataFrame, column_name: str, date: pd.Timestamp) -> pd.DataFrame:
+    '''Query the rows by same dates from the Timestamp
+
+    Params
+    ------
+    df: pd.DataFrame
+        Any DataFrame
+    column_name: str
+        Column with Timestamp
+    date: pd.Timestamp
+        Query date
+
+    Returns
+    -------
+    DataFrame: rows with same date
+    '''
+
+    return df[
+        df[column_name].dt.strftime('%Y-%m-%d') == date.strftime('%Y-%m-%d')
+    ]
 
 
 def remove_file(filename: str):
