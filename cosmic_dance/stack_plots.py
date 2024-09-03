@@ -4,9 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from cosmic_dance.dst_index import DST, percentile
+from cosmic_dance.TLEs import TLE
+
 plt.rcParams["figure.figsize"] = (20, 10)
 plt.rcParams.update({'font.size': 20})
+
 SIZE = 5
+PTILE = 99
 
 
 def get_CDF(data: pd.Series) -> tuple[np.array, np.array]:
@@ -62,19 +67,20 @@ def plot_in_stack_with_nt(
     time_delta: pd.Timedelta,
 
 
-    sdate: pd.Timestamp = None,
-    edate: pd.Timestamp = None,
-    title: str = None,
-    filename: str = None
+    sdate: pd.Timestamp | None = None,
+    edate: pd.Timestamp | None = None,
+    title: str | None = None,
+    filename: str | None = None
+
 ) -> str | None:
     '''Plot time series grouped by satellite launch date NORAD_CAT_ID color coded
 
     Params
     ------
     df_tles: pd.DataFrame
-        TLE DataFrame
+        DataFrame of TLEs
     df_nt: pd.DataFrame
-        Dst index DataFrame
+        DataFrame of Dst index
 
     time_delta: pd.Timedelta
         X axis marking time interval
@@ -83,8 +89,10 @@ def plot_in_stack_with_nt(
         Start timestamp, optional
     edate: pd.Timestamp = None
         End timestamp, optional
+
     title: str
         Figure title, optional
+
     filename: str, optional
         Outpur directory path, optional
 
@@ -94,47 +102,47 @@ def plot_in_stack_with_nt(
         PNG file name
     '''
 
-    # Dates
+    # Take start and end date of TLEs if sdate and edate not given
     if sdate is None:
-        sdate = df_tles["EPOCH"].min()
+        sdate = df_tles[TLE.EPOCH].min()
     if edate is None:
-        edate = df_tles["EPOCH"].max()
+        edate = df_tles[TLE.EPOCH].max()
 
     # Plot
     fig, axs = plt.subplots(3, 1, sharex=True)
 
     # Dst Index
     axs[0].scatter(
-        df_nt["TIMESTAMP"], df_nt["nT"],
+        df_nt[DST.TIMESTAMP], df_nt[DST.NANOTESLA],
 
         label='nT',
         s=SIZE,
         c='b'
     )
     axs[0].axhline(
-        y=67,
+        y=percentile(df_nt[DST.NANOTESLA], PTILE),
 
         color='r',
         linestyle='--',
-        label=f'{99}%tile'
+        label=f'{PTILE}%tile'
     )
 
     # Altitude
     axs[1].scatter(
-        df_tles["EPOCH"], df_tles["KM"],
+        df_tles[TLE.EPOCH], df_tles[TLE.ALTITUDE_KM],
         label='KM',
         s=SIZE,
-        c=df_tles["NORAD_CAT_ID"]
+        c=df_tles[TLE.NORAD_CAT_ID]
     )
     axs[1].set_ylim(250, 650)
 
     # Drag
     axs[2].scatter(
-        df_tles["EPOCH"], df_tles["DRAG"],
+        df_tles[TLE.EPOCH], df_tles[TLE.DRAG],
 
         label='DRAG',
         s=SIZE,
-        c=df_tles["NORAD_CAT_ID"]
+        c=df_tles[TLE.NORAD_CAT_ID]
     )
 
     #  Timeseties (x axis marking)
@@ -155,11 +163,12 @@ def plot_in_stack_with_nt(
         axs[i].grid('x')
     axs[0].legend()
 
+    # Save if filename is given
     if len(filename):
         plt.tight_layout()
-        # plt.savefig(plot_file_path, dpi=300)
         plt.savefig(filename)
         plt.close()
         return filename
+
     else:
         plt.show()

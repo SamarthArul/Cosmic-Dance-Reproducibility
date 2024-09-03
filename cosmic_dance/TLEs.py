@@ -42,6 +42,110 @@ class TLE:
     LINE2 = "TLE_LINE2"
 
 
+def get_TLEs_by_cat_id(df: pd.DataFrame, cat_id: int) -> pd.DataFrame:
+    '''Query all the TLEs by NORAD Catalog Number 
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    cat_id: int
+        NORAD Catalog Number
+
+    Returns
+    -------
+    DataFrame of TLEs after filtering
+    '''
+
+    return df[df[TLE.NORAD_CAT_ID] == cat_id]
+
+
+def get_TLEs_by_launch_date(df: pd.DataFrame, ldate: pd.Timestamp) -> pd.DataFrame:
+    '''Query all the TLEs by launch date
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    ldate: pd.Timestamp
+        Launch date
+
+    Returns
+    -------
+    DataFrame of TLEs after filtering
+    '''
+
+    return df[df[TLE.LAUNCH_DATE] == ldate]
+
+
+def get_unique_launch_dates(df: pd.DataFrame) -> pd.Series:
+    '''Unique launch dates in the given TLEs
+
+    Params
+    -------
+    df: pd.DataFrame
+        DataFrame of TLEs
+
+    Returns
+    -------
+        Series of launch dates
+    '''
+    return df[TLE.LAUNCH_DATE].unique()
+
+
+def get_unique_cat_ids(df: pd.DataFrame) -> pd.Series:
+    '''Unique NORAD Catalog Number in the given TLEs
+
+    Params
+    -------
+    df: pd.DataFrame
+        DataFrame of TLEs
+
+    Returns
+    -------
+        Series of NORAD Catalog Number
+    '''
+
+    return df[TLE.NORAD_CAT_ID].unique()
+
+
+def get_all_TLE_between_two_date(
+    df: pd.DataFrame,
+    sdate: pd.Timestamp,
+    edate: pd.Timestamp,
+    cat_id: int | None = None
+) -> pd.DataFrame | None:
+    '''Query all the TLEs of given satellite(s) within the time window
+
+    Params
+    -------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    sdate: pd.Timestamp
+        Start Timestamp
+    edate: pd.Timestamp
+        End Timestamp
+    cat_id: int, optional
+        NORAD Catalog Number (Default include all NORAD)
+
+    Returns
+    -------
+    DataFrame of TLEs if found else None
+    '''
+
+    # Filter by satellites
+    if cat_id is not None:
+        df = df[df[TLE.NORAD_CAT_ID] == cat_id]
+
+    # Filter by timestamps
+    df = df[df[TLE.EPOCH].between(sdate, edate)]
+
+    # None if not found
+    if len(df):
+        return df
+    return None
+
+
 def get_merged_TLEs_from_all_CSVs(directory_name: str, epoch_date_type: bool = True, ldate_type: bool = True) -> pd.DataFrame:
     '''Read TLEs from all CSV files in directory
 
