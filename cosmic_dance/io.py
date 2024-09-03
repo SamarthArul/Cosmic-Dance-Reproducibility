@@ -19,20 +19,6 @@ def remove_file(filename: str):
     os.remove(filename)
 
 
-def write_CSV(df: pd.DataFrame, filename: str):
-    '''Write CSV file from Dataframe
-
-    Params
-    ------
-    df: pd.DataFrame
-        DataFrame to be written
-    filename: str
-        CSV filename
-    '''
-
-    df.to_csv(filename, index=False)
-
-
 def read_CSV(filename: str, remove_nan: bool = True) -> pd.DataFrame:
     '''Read CSV file as Dataframe
 
