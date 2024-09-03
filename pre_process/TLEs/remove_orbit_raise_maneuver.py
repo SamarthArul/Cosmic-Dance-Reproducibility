@@ -32,7 +32,7 @@ def strip_orbit_raise_maneuver(filename: str, orbit_raise_df: pd.DataFrame):
         maneuver_complete_date = row.iloc[-1]["ORBIT_RAISE_COMEPLETE"]
 
         df_TLE = df_TLE[df_TLE[TLE.EPOCH] > maneuver_complete_date]
-        write_CSV(df_TLE, filename)
+        export_as_csv(df_TLE, filename)
 
         print(f'|- UPDATED:{launch_date} > {filename}')
 

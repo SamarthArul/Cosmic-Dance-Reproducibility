@@ -34,7 +34,7 @@ def clean_up(filename: str) -> None:
     _df = df[df[TLE.ALTITUDE_KM] < 650]
     if len(_df) < len(df):
         print(f"|- Invalid TLEs: {filename}: {len(df)-len(_df)}")
-        write_CSV(_df, filename)
+        export_as_csv(_df, filename)
 
 
 if __name__ == "__main__":
