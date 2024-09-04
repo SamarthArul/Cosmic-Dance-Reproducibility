@@ -5,9 +5,7 @@ import time
 import ephem
 import pandas as pd
 
-from cosmic_dance.io import (fetch_from_space_track_API, get_file_names,
-                             read_catalog_number_list, read_CSV,
-                             write_catalog_number_list)
+from cosmic_dance.io import *
 
 G: float = 6.67408 * 10**(-11)
 M: float = 5.9722*(10**24)
@@ -42,6 +40,55 @@ class TLE:
     LINE0 = "TLE_LINE0"
     LINE1 = "TLE_LINE1"
     LINE2 = "TLE_LINE2"
+
+
+def convert_from_JSON_to_CSV(filename: str, output_dir: str):
+    '''Filter the required attributes and write into a CSV file (NORAD_CAT_ID.csv)
+
+    Params
+    ------
+    filename: str
+        JSON file path
+    output_dir: str
+        Output CSV file directory
+    '''
+
+    # Reading the JSON file of TLEs
+    tles = read_JSON_file(filename)
+
+    # For each TLEs in the JSON file
+    for tle in tles:
+        # _tle = ephem.readtle(
+        #     tle[TLE.LINE0],
+        #     tle[TLE.LINE1],
+        #     tle[TLE.LINE2]
+        # )
+
+        # Building a data data dictionary for each TLEs
+        data_dict = {
+
+            # TLE.OBJECT_NAME: tle[TLE.OBJECT_NAME],
+            TLE.NORAD_CAT_ID: int(tle[TLE.NORAD_CAT_ID]),
+            # TLE.CREATION_DATE: tle[TLE.CREATION_DATE],
+            TLE.LAUNCH_DATE: tle[TLE.LAUNCH_DATE],
+
+            TLE.EPOCH: tle[TLE.EPOCH],
+            TLE.INCLINATION: float(tle[TLE.INCLINATION]),
+            TLE.RAAN: float(tle[TLE.RA_OF_ASC_NODE]),
+            TLE.ARGP: float(tle[TLE.ARG_OF_PERICENTER]),
+            TLE.ECCENTRICITY: float(tle[TLE.ECCENTRICITY]),
+            TLE.ALTITUDE_KM: convert_to_km(float(tle[TLE.MEAN_MOTION])),
+            TLE.MEAN_MOTION: float(tle[TLE.MEAN_MOTION]),
+            TLE.MEAN_ANOMALY: float(tle[TLE.MEAN_ANOMALY]),
+
+            TLE.DRAG: float(tle[TLE.BSTAR]),
+            # TLE.DRAG: float(_tle.drag),
+            # TLE.LAT: float(math.degrees(_tle.sublat)),
+            # TLE.LONG: float(math.degrees(_tle.sublong))
+
+        }
+
+        CSV_logger(data_dict, output_dir)
 
 
 def download_TLEs(

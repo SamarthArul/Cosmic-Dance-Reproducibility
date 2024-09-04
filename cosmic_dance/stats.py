@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_CDF(data: pd.Series) -> tuple[np.array, np.array]:
+def cdf(data: pd.Series) -> tuple[np.array, np.array]:
     '''Get X and Y axis values for Cumulative distribution function
 
     Params
