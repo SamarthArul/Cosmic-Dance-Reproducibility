@@ -1,10 +1,9 @@
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
-from cosmic_dance.dst_index import DST, percentile
+from cosmic_dance.dst_index import DST
 from cosmic_dance.TLEs import TLE
 
 plt.rcParams["figure.figsize"] = (20, 10)
@@ -12,24 +11,6 @@ plt.rcParams.update({'font.size': 20})
 
 SIZE = 5
 PTILE = 99
-
-
-def get_CDF(data: pd.Series) -> tuple[np.array, np.array]:
-    '''Get X and Y axis values for Cumulative distribution function
-
-    Params
-    ------
-    data: pd.Series
-        List of data points
-
-    Returns
-    -------
-    tuple[np.array, np.array] X and Y axis values
-    '''
-
-    x = np.sort(data)
-    y = np.arange(len(data)) / float(len(data))
-    return x, y
 
 
 def get_date_marks(sdate: pd.Timestamp, edate: pd.Timestamp, time_delta: pd.Timedelta) -> list[pd.Timestamp]:

@@ -1,11 +1,13 @@
 import math
 import sys
+import time
 
 import ephem
 import pandas as pd
 
-from cosmic_dance.io import (get_file_names, read_catalog_number_list,
-                             read_CSV, write_catalog_number_list)
+from cosmic_dance.io import (fetch_from_space_track_API, get_file_names,
+                             read_catalog_number_list, read_CSV,
+                             write_catalog_number_list)
 
 G: float = 6.67408 * 10**(-11)
 M: float = 5.9722*(10**24)
@@ -40,6 +42,48 @@ class TLE:
     LINE0 = "TLE_LINE0"
     LINE1 = "TLE_LINE1"
     LINE2 = "TLE_LINE2"
+
+
+def download_TLEs(
+    catelog_numbers: list[int],
+    credentials: list[dict[str, str]],
+    start_date: str,
+    end_date: str,
+    output_dir: str
+):
+    '''Download all TLEs EPOCH within given time range while maintain the the maximum request limit
+
+    Params
+    ------
+    catelog_numbers: list[int]
+        List of satellite NORAD Catalog Number
+    credentials: list[dict[str, str]]
+        List of credentials
+    start_date: str,
+        Epoch start date
+    end_date: str,
+        Epoch end date
+    output_dir: str
+        Download file directory
+    '''
+
+    # Fetch TLEs using credentials
+    for id, catelog_number in enumerate(catelog_numbers):
+        username = credentials[id % len(credentials)].get('ID')
+        password = credentials[id % len(credentials)].get('PWD')
+
+        # Retry if failed
+        while fetch_from_space_track_API(username, password, catelog_number, start_date, end_date, output_dir) is False:
+            print(f"|- Error: {catelog_number}, waiting...")
+            time.sleep(30)
+
+        print(
+            f"|- Completed: {catelog_number}, Progress ({id+1}/{len(catelog_numbers)})"
+        )
+
+        # Wating to stay under the request limit
+        if 0 == id % len(credentials):
+            time.sleep(30)
 
 
 def get_median_altitude(df: pd.DataFrame, end_date: pd.Timestamp = None) -> float:

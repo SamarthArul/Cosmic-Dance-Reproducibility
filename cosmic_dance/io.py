@@ -6,9 +6,11 @@ import shutil
 import pandas as pd
 import requests
 
+OUTPUT_DIR = "artifacts/OUTPUT"
+
 
 def create_directories(*directories: tuple[str]):
-    '''Create/recreate directories
+    '''Create directories
 
     Params
     ------
@@ -17,7 +19,19 @@ def create_directories(*directories: tuple[str]):
     '''
 
     for directory in directories:
+        os.makedirs(directory, exist_ok=True)
 
+
+def recreate_directories(*directories: tuple[str]):
+    '''Recreate directories
+
+    Params
+    ------
+    directories: tuple[str]
+        Name of directories
+    '''
+
+    for directory in directories:
         if os.path.exists(directory):
             input(f"DELETE {directory} ?")
             shutil.rmtree(directory)

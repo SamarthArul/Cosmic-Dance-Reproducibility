@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 from cosmic_dance.io import fetch_from_url, read_CSV
@@ -108,24 +107,6 @@ def add_window_duration(df: pd.DataFrame) -> pd.DataFrame:
     ) / pd.Timedelta(hours=1)
 
     return df
-
-
-def percentile(df: pd.Series, percentiles: list[float]) -> list[float]:
-    '''Get list of percentiles of given list of numbers (intensities)
-
-    Params
-    ------
-    df: pd.Series
-        List of data points
-    percentiles: list[float]
-        List of percentiles
-
-    Returns
-    -------
-    list[float]: Corresponding value of list[float] 
-    '''
-
-    return np.percentile(df, percentiles)
 
 
 def extract_timespan_above_nT_intensity(df: pd.DataFrame, THRESHOLD: float) -> pd.DataFrame:
