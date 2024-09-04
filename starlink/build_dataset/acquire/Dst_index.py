@@ -11,7 +11,6 @@ Auto fetch all the Dst index value from Geomagnetic Equatorial Dst index Home Pa
 from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
 
-
 # Month wise URLS
 urls = [
 
@@ -81,13 +80,12 @@ urls = [
     "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202407/dst2407.for.request"
 ]
 
-if __name__ == '__main__':
 
-    # OUTPUT CSV filename
-    OUTPUT_FILE = "artifacts/DST/Dst_index.csv"
+# OUTPUT FILE(s)
+OUTPUT_FILE = "artifacts/DST/Dst_index.csv"
 
-    input(f"Confirm output file ({OUTPUT_FILE})? ")
+input(f"Confirm output file ({OUTPUT_FILE})? ")
 
-    # Parse the dataset and save into CSV
-    df_dst_index = parse_dst_index(urls)
-    export_as_csv(df_dst_index, OUTPUT_FILE)
+# Parse the dataset and save into CSV
+df_dst_index = parse_dst_index(urls)
+export_as_csv(df_dst_index, OUTPUT_FILE)
