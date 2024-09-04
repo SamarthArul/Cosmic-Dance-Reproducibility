@@ -36,6 +36,9 @@ def clean_up(filename: str) -> None:
         print(f"|- Invalid TLEs: {filename}: {len(df)-len(_df)}")
         export_as_csv(_df, filename)
 
+    else:
+        export_as_csv(df, filename)
+
 
 if __name__ == "__main__":
     OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink"
