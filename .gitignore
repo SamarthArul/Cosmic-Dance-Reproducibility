@@ -166,3 +166,5 @@ credentials/credentials_2.json
 credentials/credentials_3.json
 figures/*
 artifacts/DST/timespans/*
+
+artifacts/OUTPUT/*
