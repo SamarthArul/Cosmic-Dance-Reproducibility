@@ -1,7 +1,7 @@
 import concurrent.futures
 
 from cosmic_dance.dst_index import *
-from cosmic_dance.stack_plots import plot_in_stack_with_nt
+from cosmic_dance.stack_plots import *
 from cosmic_dance.TLEs import *
 
 
@@ -21,7 +21,7 @@ def plot_group_by_launch_date(df_nt: pd.DataFrame, df_tles: pd.DataFrame, ldate:
     '''
 
     # Extract the launch date and build title and filename
-    ldate = str(ldate).split('T')[0]
+    ldate = str(ldate).split(' ')[0]
     title = f'Launch date: {ldate}'
     filename = f'{PLOT_OUTPUT_DIR}/{ldate}.png'
 
@@ -40,7 +40,7 @@ def plot_group_by_launch_date(df_nt: pd.DataFrame, df_tles: pd.DataFrame, ldate:
     print(f'|- {filename}')
 
 
-def plot_by_cat_id(df_nt: pd.DataFrame, df_tles: pd.DataFrame, cat_id: int) -> None:
+def plot_by_cat_id(df_nt: pd.DataFrame, df_tles: pd.DataFrame, cat_id: int):
     '''Helper method for calling plot_in_stack_with_nt()
 
     Plot time series with each satellite
@@ -55,7 +55,7 @@ def plot_by_cat_id(df_nt: pd.DataFrame, df_tles: pd.DataFrame, cat_id: int) -> N
         NORAD Catalog Number
     '''
 
-    ldate = str(df_tles.iloc[-1]["LAUNCH_DATE"]).split('T')[0]
+    ldate = str(df_tles.iloc[-1]["LAUNCH_DATE"]).split(' ')[0]
     title = f'CAT ID: {cat_id} || Launch date: {ldate}'
     filename = f'{PLOT_OUTPUT_DIR}/{cat_id}.png'
 
@@ -75,32 +75,38 @@ def plot_by_cat_id(df_nt: pd.DataFrame, df_tles: pd.DataFrame, cat_id: int) -> N
 
 
 if __name__ == '__main__':
+    OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink"
 
     PARALLEL_MODE = True
 
-    # Output directory
-    # PLOT_OUTPUT_DIR = '/mnt/Storage/OUTPUTs/Starlink/VIEW/SUPERSTORM'
-    PLOT_OUTPUT_DIR = '/mnt/Storage/OUTPUTs/Starlink/VIEW/RAW_LDATE'
-    # PLOT_OUTPUT_DIR = '/mnt/Storage/OUTPUTs/Starlink/VIEW/RAW_CAT_ID'
+    # INPUT FILE(s)
 
     # TLEs and DST files
-    TLE_DIR_CSV = '/mnt/Storage/OUTPUTs/Starlink/TLEs'
-    DST_CSV = 'artifacts/DST/Dst_index.csv'
+    TLE_CSV_DIR = f"{OUTPUT_DIR}/TLEs"
+    DST_CSV = "artifacts/DST/Dst_index.csv"
+
+    # OUTPUT FILE(s)
+
+    PLOT_OUTPUT_DIR = f"{OUTPUT_DIR}/VIEW/RAW_LDATE"
+    # PLOT_OUTPUT_DIR = f"{OUTPUT_DIR}/VIEW/RAW_CAT_ID"
+    # PLOT_OUTPUT_DIR = f"{OUTPUT_DIR}/VIEW/SUPERSTORM"
 
     # Start & end time marking interval
     START_DATE = None
     END_DATE = None
     TIME_DELTA = pd.Timedelta(weeks=4)
+
     # START_DATE = pd.to_datetime("2024-05-01")
     # END_DATE = pd.to_datetime("2024-05-31")
     # TIME_DELTA = pd.Timedelta(days=2)
 
     # Confirm
-    input(f"File(s) in {PLOT_OUTPUT_DIR} might get altered?")
+    input(f" File(s) in {PLOT_OUTPUT_DIR} might get altered? ")
+    create_directories(PLOT_OUTPUT_DIR)
 
     # Reading CSVs
     df_nt = read_dst_index_CSV(DST_CSV)
-    df_tles = get_merged_TLEs_from_all_CSVs(TLE_DIR_CSV)
+    df_tles = get_merged_TLEs_from_all_CSVs(TLE_CSV_DIR)
 
     # Filtering
     if START_DATE is not None or END_DATE is not None:

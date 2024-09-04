@@ -3,7 +3,8 @@ import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from cosmic_dance.dst_index import DST
+from cosmic_dance.dst_index import DST, get_Dst_in_range
+from cosmic_dance.stats import percentile
 from cosmic_dance.TLEs import TLE
 
 plt.rcParams["figure.figsize"] = (20, 10)
@@ -88,6 +89,8 @@ def plot_in_stack_with_nt(
         sdate = df_tles[TLE.EPOCH].min()
     if edate is None:
         edate = df_tles[TLE.EPOCH].max()
+
+    df_nt = get_Dst_in_range(df_nt, sdate, edate)
 
     # Plot
     fig, axs = plt.subplots(3, 1, sharex=True)
