@@ -381,7 +381,7 @@ def read_TLEs_in_CSV(filename: str, epoch_date_type: bool = True, ldate_type: bo
         df[TLE.LAUNCH_DATE] = pd.to_datetime(df[TLE.LAUNCH_DATE])
 
     if epoch_date_type:
-        df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH])
+        df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH], format='mixed')
 
     return df
 
@@ -399,7 +399,7 @@ def satellite_age_in_days(df: pd.DataFrame) -> float:
     float: Days
     '''
 
-    _df = pd.to_datetime(df[TLE.EPOCH])
+    _df = pd.to_datetime(df[TLE.EPOCH], format='mixed')
     return (_df.iloc[-1] - _df.iloc[0])/pd.Timedelta(days=1)
 
 
