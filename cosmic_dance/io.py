@@ -6,8 +6,6 @@ import shutil
 import pandas as pd
 import requests
 
-OUTPUT_DIR = "artifacts/OUTPUT"
-
 
 def create_directories(*directories: tuple[str]):
     '''Create directories
