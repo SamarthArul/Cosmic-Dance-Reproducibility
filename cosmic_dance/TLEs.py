@@ -381,7 +381,7 @@ def read_TLEs_in_CSV(filename: str, epoch_date_type: bool = True, ldate_type: bo
         df[TLE.LAUNCH_DATE] = pd.to_datetime(df[TLE.LAUNCH_DATE])
 
     if epoch_date_type:
-        df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH])
+        df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH], format='mixed')
 
     return df
 
