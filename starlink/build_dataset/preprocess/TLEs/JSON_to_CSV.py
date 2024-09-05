@@ -9,21 +9,26 @@ import concurrent.futures
 from cosmic_dance.io import *
 from cosmic_dance.TLEs import *
 
-OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink"
-
 PARALLEL_MODE = True
 
 
+# ------------------------------------------------------------------
+# OUTPUT FILE(s)
+# ------------------------------------------------------------------
+
+# CSV file Directory
+CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
+
+
+# ------------------------------------------------------------------
 # INPUT FILE(s)
+# ------------------------------------------------------------------
 
 # JSON file Directory
-JSON_DIR = f"{OUTPUT_DIR}/RAW_TLEs"
+JSON_DIR = "artifacts/OUTPUT/Starlink/RAW_TLEs"
 
 
-# OUTPUT FILE(s)
-
-# OUTPUT - CSV file Directory
-CSV_DIR = f"{OUTPUT_DIR}/TLEs"
+# ------------------------------------------------------------------
 
 
 recreate_directories(CSV_DIR)

@@ -10,20 +10,28 @@ from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
 from cosmic_dance.stats import *
 
-OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink/timespans/quiet_day"
-create_directories(OUTPUT_DIR)
-
-# INPUT FILE(s)
-DST_CSV = "artifacts/DST/Dst_index.csv"
-
-
+# ------------------------------------------------------------------
 # OUTPUT FILE(s)
+# ------------------------------------------------------------------
+
+OUTPUT_DIR = "artifacts/OUTPUT/Starlink/timespans/quiet_day"
 
 # Intensity below 80 %tile for atleast 13 days
 DST_TIMESPAN_PTILE_80 = f"{OUTPUT_DIR}/below_ptile_80.csv"
-
 # Merging the solar activity window closer than 10 days
 MERGED_DST_TIMESPAN_PTILE_80 = f"{OUTPUT_DIR}/merged_below_ptile_80.csv"
+
+
+# ------------------------------------------------------------------
+# INPUT FILE(s)
+# ------------------------------------------------------------------
+
+DST_CSV = "artifacts/DST/Dst_index.csv"
+
+
+# ------------------------------------------------------------------
+
+create_directories(OUTPUT_DIR)
 
 
 df_dst = read_dst_index_CSV(DST_CSV)

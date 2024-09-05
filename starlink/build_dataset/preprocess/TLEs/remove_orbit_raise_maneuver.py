@@ -45,16 +45,22 @@ def strip_orbit_raise_maneuver(filename: str, orbit_raise_df: pd.DataFrame):
 
 if __name__ == "__main__":
 
-    OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink"
-
     PARALLEL_MODE = True
 
+    # ------------------------------------------------------------------
+    # OUTPUT FILE(s)
+    # ------------------------------------------------------------------
+
+    TLE_CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
+
+    # ------------------------------------------------------------------
     # INPUT FILE(s)
-    TLE_CSV_DIR = f"{OUTPUT_DIR}/TLEs"
+    # ------------------------------------------------------------------
+
+    TLE_CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
     ORBIT_RAISE_CSV = "artifacts/starlink_orbit_raise.csv"
 
-    # OUTPUT FILE(s)
-    TLE_CSV_DIR = f"{OUTPUT_DIR}/TLEs"
+    # ------------------------------------------------------------------
 
     # Confirm
     input(f" File(s) in ({TLE_CSV_DIR}) might get altered? ")

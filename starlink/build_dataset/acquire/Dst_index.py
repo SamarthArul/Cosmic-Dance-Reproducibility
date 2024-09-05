@@ -11,6 +11,17 @@ Auto fetch all the Dst index value from Geomagnetic Equatorial Dst index Home Pa
 from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
 
+# ------------------------------------------------------------------
+# OUTPUT FILE(s)
+# ------------------------------------------------------------------
+
+OUTPUT_FILE = "artifacts/DST/Dst_index.csv"
+
+# ------------------------------------------------------------------
+# INPUT FILE(s)
+# ------------------------------------------------------------------
+
+
 # Month wise URLS
 urls = [
 
@@ -81,8 +92,8 @@ urls = [
 ]
 
 
-# OUTPUT FILE(s)
-OUTPUT_FILE = "artifacts/DST/Dst_index.csv"
+# ------------------------------------------------------------------
+
 
 input(f"Confirm output file ({OUTPUT_FILE})? ")
 

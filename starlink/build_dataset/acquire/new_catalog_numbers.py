@@ -3,20 +3,29 @@
 from cosmic_dance.io import *
 from cosmic_dance.TLEs import *
 
-OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink"
-
-# INPUT FILE(s)
-OLD_CAT_IDS = "artifacts/NORAD_CAT_NUM/StarlinkCatIDs.txt"
-URL = "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle"
-
-
+# ------------------------------------------------------------------
 # OUTPUT FILE(s)
+# ------------------------------------------------------------------
+
+OUTPUT_DIR = "artifacts/OUTPUT/Starlink"
+
 TLE_FILE = f"{OUTPUT_DIR}/Starlink.tle"
 NEW_CAT_IDS = f"{OUTPUT_DIR}/NewStarlinkCatIDs.txt"
 
+# ------------------------------------------------------------------
+# INPUT FILE(s)
+# ------------------------------------------------------------------
+
+
+OLD_CAT_IDS = "artifacts/NORAD_CAT_NUM/StarlinkCatIDs.txt"
+URL = "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle"
+
+# ------------------------------------------------------------------
+
+
 # Confim before write
-input(f" OUTPUT file: ({TLE_FILE})")
-input(f" OUTPUT file: ({NEW_CAT_IDS})")
+input(f" OUTPUT file: ({TLE_FILE}) ?")
+input(f" OUTPUT file: ({NEW_CAT_IDS}) ?")
 
 # Create OUTPUT directory
 create_directories(OUTPUT_DIR)

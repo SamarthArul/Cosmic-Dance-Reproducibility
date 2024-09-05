@@ -24,8 +24,11 @@ def clean_up(filename: str) -> None:
         remove_file(filename)
         return
 
+    # For consistent date and time formating
+    df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH])
+
     # Removing file with satellite age below 30 days
-    elif satellite_age_in_days(df) < 30:
+    if satellite_age_in_days(df) < 30:
         print(f"|- Remove: {filename} < 30 days")
         remove_file(filename)
         return
@@ -34,26 +37,27 @@ def clean_up(filename: str) -> None:
     _df = df[df[TLE.ALTITUDE_KM] < 650]
     if len(_df) < len(df):
         print(f"|- Invalid TLEs: {filename}: {len(df)-len(_df)}")
-        export_as_csv(_df, filename)
 
-    else:
-        export_as_csv(df, filename)
+    export_as_csv(_df, filename)
 
 
 if __name__ == "__main__":
-    OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink"
 
     PARALLEL_MODE = True
 
-    # INPUT FILE(s)
-
-    # TLEs CSV file Directory
-    TLE_CSV_DIR = f"{OUTPUT_DIR}/TLEs"
-
+    # ------------------------------------------------------------------
     # OUTPUT FILE(s)
+    # ------------------------------------------------------------------
 
-    # TLEs CSV file Directory
-    TLE_CSV_DIR = f"{OUTPUT_DIR}/TLEs"
+    TLE_CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
+
+    # ------------------------------------------------------------------
+    # INPUT FILE(s)
+    # ------------------------------------------------------------------
+
+    TLE_CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
+
+    # ------------------------------------------------------------------
 
     # Confirm
     input(f" File(s) in ({TLE_CSV_DIR}) might get altered ? ")

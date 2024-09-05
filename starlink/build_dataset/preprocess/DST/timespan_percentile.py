@@ -10,14 +10,12 @@ from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
 from cosmic_dance.stats import *
 
-OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink/timespans/percentile"
-create_directories(OUTPUT_DIR)
-
-# INPUT FILE(s)
-DST_CSV = "artifacts/DST/Dst_index.csv"
-
-
+# ------------------------------------------------------------------
 # OUTPUT FILE(s)
+# ------------------------------------------------------------------
+
+OUTPUT_DIR = "artifacts/OUTPUT/Starlink/timespans/percentile"
+
 
 # Solar activity window above the 80, 95, and 99 %tile
 DST_TIMESPAN_PTILE_99 = f"{OUTPUT_DIR}/above_ptile_99.csv"
@@ -28,6 +26,18 @@ DST_TIMESPAN_PTILE_80 = f"{OUTPUT_DIR}/above_ptile_80.csv"
 MERGED_DST_TIMESPAN_PTILE_80 = f"{OUTPUT_DIR}/merged_above_ptile_80.csv"
 MERGED_DST_TIMESPAN_PTILE_95 = f"{OUTPUT_DIR}/merged_above_ptile_95.csv"
 MERGED_DST_TIMESPAN_PTILE_99 = f"{OUTPUT_DIR}/merged_above_ptile_99.csv"
+
+# ------------------------------------------------------------------
+# INPUT FILE(s)
+# ------------------------------------------------------------------
+
+DST_CSV = "artifacts/DST/Dst_index.csv"
+
+# ------------------------------------------------------------------
+
+
+create_directories(OUTPUT_DIR)
+
 
 # Above 80, 95, 99 %tile
 df_dst = read_dst_index_CSV(DST_CSV)

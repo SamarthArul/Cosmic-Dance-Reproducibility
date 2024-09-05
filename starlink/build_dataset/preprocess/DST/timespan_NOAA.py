@@ -15,35 +15,38 @@ Source: https://www.swpc.noaa.gov/noaa-scales-explanation
 from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
 
-OUTPUT_DIR = f"{OUTPUT_DIR}/Starlink/timespans/NOAA"
-create_directories(OUTPUT_DIR)
+# ------------------------------------------------------------------
+# OUTPUT FILE(s)
+# ------------------------------------------------------------------
 
+OUTPUT_DIR = "artifacts/OUTPUT/Starlink/timespans/NOAA"
 
+OUTPUT_MILD_FILE = f"{OUTPUT_DIR}/MILD.csv"
+OUTPUT_MODERERATE_FILE = f"{OUTPUT_DIR}/MODERERATE.csv"
+OUTPUT_INTENSE_FILE = f"{OUTPUT_DIR}/SEVERE.csv"
+OUTPUT_SUPER_FILE = f"{OUTPUT_DIR}/EXTREME.csv"
+
+# ------------------------------------------------------------------
 # INPUT FILE(s)
+# ------------------------------------------------------------------
+
 DST_CSV = "artifacts/DST/Dst_index.csv"
 
 
-# OUTPUT FILE(s)
-
-# MILD
-OUTPUT_MILD_FILE = f"{OUTPUT_DIR}/MILD.csv"
 MILD_LB = 50
 MILD_UB = 100
 
-# MODERERATE
-OUTPUT_MODERERATE_FILE = f"{OUTPUT_DIR}/MODERERATE.csv"
 MODERERATE_LB = 101
 MODERERATE_UB = 200
 
-# SEVERE
-OUTPUT_INTENSE_FILE = f"{OUTPUT_DIR}/SEVERE.csv"
 SEVERE_LB = 201
 SEVERE_UB = 250
 
-# EXTREME
-OUTPUT_SUPER_FILE = f"{OUTPUT_DIR}/EXTREME.csv"
 EXTREME_LB = 251
 EXTREME_UB = 1800
+# ------------------------------------------------------------------
+
+create_directories(OUTPUT_DIR)
 
 
 # Create the time windows of different scale
