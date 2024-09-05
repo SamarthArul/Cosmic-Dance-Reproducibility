@@ -21,7 +21,7 @@ def plot_group_by_launch_date(df_nt: pd.DataFrame, df_tles: pd.DataFrame, ldate:
     '''
 
     # Extract the launch date and build title and filename
-    ldate = str(ldate).split('T')[0]
+    ldate = str(ldate).split(' ')[0]
     title = f'Launch date: {ldate}'
     filename = f'{PLOT_OUTPUT_DIR}/{ldate}.png'
 
@@ -55,7 +55,7 @@ def plot_by_cat_id(df_nt: pd.DataFrame, df_tles: pd.DataFrame, cat_id: int):
         NORAD Catalog Number
     '''
 
-    ldate = str(df_tles.iloc[-1]["LAUNCH_DATE"]).split('T')[0]
+    ldate = str(df_tles.iloc[-1]["LAUNCH_DATE"]).split(' ')[0]
     title = f'CAT ID: {cat_id} || Launch date: {ldate}'
     filename = f'{PLOT_OUTPUT_DIR}/{cat_id}.png'
 
