@@ -1,6 +1,7 @@
 
 from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
+from cosmic_dance.stats import percentile
 from cosmic_dance.TLEs import *
 
 
@@ -100,13 +101,13 @@ def track_satellite_altitude_change(
 
 
 def maximum_altitude_difference(
-        event_date: pd.Timestamp,
-        observation_days: list[int],
+    event_date: pd.Timestamp,
+    observation_days: list[int],
 
-        tle_filename: str,
-        out_filename: str,
+    tle_filename: str,
+    out_filename: str,
 
-        change_thershold: float = 5.0
+    change_thershold: float = 5.0
 ):
     '''Measure maximum altitude difference observed of a given satellite by next a few observation days
 
@@ -178,3 +179,107 @@ def maximum_altitude_difference(
         record[f"DRAG_after_DAY_{day_count}"] = absolute_drag.max()
 
     CSV_logger(record, out_filename)
+
+
+def generate_tracking_insight(
+    df: pd.DataFrame,
+    query_date: pd.Timestamp,
+    sat_tracked_csv: str,
+    tle_per_sat_csv: str
+):
+    '''Extracts number of satellites tracked and number of TLEs per satellites
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    query_date: pd.Timestamp
+        Timestamp of a day
+    sat_tracked_csv: str
+        CSV filename for number of satellite tracked
+    tle_per_sat_csv: str
+        CSV filename for number of TLEs per satellite tracked
+    '''
+
+    unique_cat_ids = get_unique_cat_ids(df)
+
+    print(
+        f'''|- [{query_date}] #TLEs: {len(df)} #Sats: {len(unique_cat_ids)}'''
+    )
+
+    # Total number of satellite tracked on that day (query_date)
+    CSV_logger(
+        {
+            "DAY": query_date,
+            "TOTAL_TLE_UPDATE": len(df),
+            "UNIQUE_SAT": len(unique_cat_ids)
+        },
+        sat_tracked_csv
+    )
+
+    # Total number of TLEs per satellite on that day (query_date)
+    for cat_id in unique_cat_ids:
+        CSV_logger(
+            {
+                "DAY": query_date,
+                "NORAD_CAT_ID": cat_id,
+                "TOTAL_TLE": len(df[df[TLE.NORAD_CAT_ID] == cat_id])
+            },
+            tle_per_sat_csv
+        )
+
+
+def generate_drag_insight(
+    df: pd.DataFrame,
+    query_date: pd.Timestamp,
+    drag_observation_csv: str,
+    positive_drag_stats_csv: str
+):
+    '''Extract drag experienced by satellites, 
+    negative (count be station keeping) and positive drags are segregated 
+    and statistics of positive drag generated
+
+    Params
+    ------
+    df: pd.DataFrame
+        DataFrame of TLEs
+    query_date: pd.Timestamp
+        Timestamp of a day
+    drag_observation_csv: str
+        CSV filename for +ve and -ve drag obervation
+    positive_drag_stats_csv: str
+        CSV filename for statistics of +ve obervation
+    '''
+
+    df_positive = df[df[TLE.DRAG] > 0]
+    df_negative = df[df[TLE.DRAG] < 0]
+    df_zero = df[df[TLE.DRAG] == 0]
+
+    print(
+        f'''|- [{query_date}] #+ve DRAG: {len(df_positive)}  #-ve DRAG: {len(df_negative)}'''
+    )
+
+    # Total positive and negative drag observations
+    CSV_logger(
+        {
+            "DAY": query_date,
+            "TOTAL_TLE": len(df),
+            "POSITIVE_DRAG": len(df_positive),
+            "NEGATIVE_DRAG": len(df_negative),
+            "ZERO_DRAG": len(df_zero),
+        },
+        drag_observation_csv
+    )
+
+    # Statistics of positive drag observations
+    CSV_logger(
+        {
+            "DAY": query_date,
+            "MEDIAN": df_positive["DRAG"].median(),
+            "MEAN": df_positive["DRAG"].mean(),
+            "MAX": df_positive["DRAG"].max(),
+            "MIN": df_positive["DRAG"].min(),
+            "P95": percentile(df_positive[TLE.DRAG], 95),
+        },
+        positive_drag_stats_csv
+    )
