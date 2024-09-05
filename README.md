@@ -1,31 +1,36 @@
 # Cosmic Dance - Measuring Orbital Shifts
 
-A tool designed to analyze the impact of solar radiation on spaceborne infrastructure, particularly in Low Earth Orbit (LEO). By leveraging data from large-scale deployments like SpaceX’s Starlink, `CosmicDance` provides insights into satellite orbital shifts and identifies risks such as premature orbital decay. 
+A tool designed to analyze the impact of solar radiation on spaceborne infrastructure, particularly in Low Earth Orbit (LEO). By leveraging data from large-scale deployments like SpaceX’s Starlink, **CosmicDance** provides insights into satellite orbital shifts and identifies risks such as premature orbital decay.
 
 
+
+# Table of Contents
+- [Getting started](#Getting-started)
+    - [Setting up](#setting-up)
+    - [Measure orbital shifts](#measure-orbital-shifts)
+        - [Acquire dataset](#acquire-dataset)
+        - [Pre-process the dataset](#pre-process-the-dataset)
+        - [Timeseries](#timeseries)
+        - [Type of orbital shifts](#type-of-orbital-shifts)
+        - [Maximum altitude change](#maximum-altitude-change)
+        - [Measuring Solar Superstorm of May 2024](#measuring-solar-superstorm-of-may-2024)
+        - [Analysis of a few other satellites](#analysis-of-a-few-other-satellites)
+- [License](#license)
+- [Cite this work](#cite-this-work)
+- [Credits](#credits)
+
+
+
+# Getting started
+
+**CosmicDance** is a modular framework that utilizes multimodal datasets, including solar activity intensity and satellite tracking data. It maps these datasets in a time series to measure and visualize how orbital trajectories change at scale.
 
 <p align="center">
 <img src="docs/img/overview_45210_45534.png">
 </p>
 
-
-## Table of Contents
-- [Setting up](#setting-up)
-- [Measure orbital shifts](#measure-orbital-shifts)
-    - [Acquire dataset](#acquire-dataset) 
-    - [Pre-procee the dataset](#pre-procee-the-dataset)
-    - [Timeseries](#timeseries)
-    - [Type of orbital shifts](#type-of-orbital-shifts)
-    - [Maximum altitude change](#maximum-altitude-change)
-    - [Measuring Solar Superstorm of May 2024](#measuring-solar-superstorm-of-may-2024)
-    - [Analysis of a few other satellites](#analysis-of-a-few-other-satellites)
-- [Citation](#citation)
-- [License](https://github.com/suvambasak/CosmicDance?tab=MIT-1-ov-file)
-
-
-
-
 ## Setting up
+Use the following steps to build **CosmicDance** environment.
 
 - Install dependencies
 
@@ -33,13 +38,19 @@ A tool designed to analyze the impact of solar radiation on spaceborne infrastru
 sudo apt install curl
 ```
 
-- Create conda environment
+- Create conda environment from `environment.yml`
 
 ```bash
 conda env create -f dependencies/environment.yml
 ```
 
-- Activate environment
+For macOS use `environment_macOS.yml`
+
+```bash
+conda env create -f dependencies/environment_macOS.yml
+```
+
+- Activate `cosmicdance` environment
 
 ```bash
 conda deactivate && conda activate cosmicdance
@@ -54,7 +65,7 @@ conda deactivate && conda activate cosmicdance
 }
 ```
 
-- Set `CosmicDance` path
+- Export `CosmicDance` path in the shell. This will allow seamless execution of scripts.
 
 ```bash
 export PYTHONPATH=`COSMIC_DANCE_PATH`
@@ -62,7 +73,19 @@ export PYTHONPATH=`COSMIC_DANCE_PATH`
 
 ## Measure orbital shifts
 
+**CosmicDance** processes datasets in parallel by default. However, for each script, you can set `PARALLEL_MODE` to `False` to run the processing in serial mode.
+
+> **Note:** macOS users may encounter issues with parallel mode. It is recommended to set `PARALLEL_MODE` to `False` in such cases.
+
+```python
+PARALLEL_MODE = False
+```
+
 ### Acquire dataset
+
+**CosmicDance** automatically acquires solar activity data (Dst index) from the [World Data Center for Geomagnetism](https://wdc.kugi.kyoto-u.ac.jp/index.html), Kyoto, NORAD Catalogue Numbers from [CelesTrak](https://celestrak.org), and TLEs from [Space-Track](https://www.space-track.org/auth/login) through the following steps.
+
+
 - Get Dst index
 ```bash
 python starlink/build_dataset/acquire/Dst_index.py
@@ -76,50 +99,80 @@ python starlink/build_dataset/acquire/new_catalog_numbers.py
 python starlink/build_dataset/acquire/download_historic_tles.py
 ```
 
-### Pre-procee the dataset
+### Pre-process the dataset
+
+Prepare the dataset for orbital shift analysis by following these steps:
+
+
 #### Dst Index
-- Solar storm times according to NOAA Space Weather Scales
+
+Prepare the time window (start and end timestamps) of solar activities above or below a certain intensity by following these steps:
+
+- Solar storm times according to [NOAA Space Weather Scales](https://www.swpc.noaa.gov/noaa-scales-explanations)
+
 ```bash
 python starlink/build_dataset/preprocess/DST/timespan_NOAA.py
 ```
+
 - Solar activities above some percentile
+
 ```bash
 python starlink/build_dataset/preprocess/DST/timespan_percentile.py
 ```
+
 - Quiet time below some percentile
+
 ```bash
 python starlink/build_dataset/preprocess/DST/timespan_quiet_day.py
 ```
+
+
 #### TLEs
-- Convert TLEs from JSON to CSV
+
+Preprocess the TLEs by removing erroneous values and filtering out Starlink orbit-raising operations from the staging orbit after launch through the following steps:
+
+- Convert TLEs from `JSON` to `CSV`
+
 ```bash
 python starlink/build_dataset/preprocess/TLEs/JSON_to_CSV.py
 ```
+
 - Cleanup the TLEs
+
 ```bash
 python starlink/build_dataset/preprocess/TLEs/cleanup.py
 ```
+
 - Remove TLEs before orbit raise (Starlink)
+
 ```bash
 python starlink/build_dataset/preprocess/TLEs/remove_orbit_raise_maneuver.py
 ```
 
 ### Timeseries
+
 - Generate launch date (or satellite) wise time series plot of orbital parameters with intensity of solar activities
+
 ```bash
 python starlink/timeseries/view_timeseries_with_dst.py
 ```
+
 - Other time series plots in [notebook](/starlink/timeseries/timeseries_view.ipynb)
 
 
 ### Type of orbital shifts
+
+Measure the satellite orbital changes, specifically altitude, within high and low solar activity windows in a time series by following these steps:
+
 - Orbital shifts after quiet day
 
-Set `OUTPUT_DIR` and `EVENT_DATES_CSV`
+Set relevant input output files using `OUTPUT_DIR` and `EVENT_DATES_CSV`
+
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/quiet_day"
 EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/quiet_day/below_ptile_80.csv"
 ```
+
 Execute the measurement script
 
 ```bash
@@ -128,14 +181,14 @@ python starlink/orbital_shifts/trace_altitude.py
 
 - Orbital shifts after high solar activity day
 
-Set `OUTPUT_DIR` and `EVENT_DATES_CSV`
+Set relevant input output files using `OUTPUT_DIR` and `EVENT_DATES_CSV`
 
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/merged_above_ptile_99/RAW"
 EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/percentile/merged_above_ptile_99.csv"
 ```
-Execute the measurement script
 
+Execute the measurement script
 
 ```bash
 python starlink/orbital_shifts/trace_altitude.py
@@ -151,11 +204,13 @@ python starlink/orbital_shifts/detect_altitude_shifts.py
 
 ### Maximum altitude change
 
+Measure the impact of solar event intensity and duration on orbital changes, specifically altitude, by following these steps:
+
 #### For intensity
 
 - After low intensity solar activity days
 
-Set `OUTPUT_DIR`, `OUTPUT_CSV`, and `DST_TIMESPAN`
+Set relevant input output files using `OUTPUT_DIR`, `OUTPUT_CSV`, and `DST_TIMESPAN`
 
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/maximum_altitude_change"
@@ -171,7 +226,7 @@ python starlink/altitude_change/for_intensity.py
 
 - After high intensity solar activity days
 
-Set `OUTPUT_DIR`, `OUTPUT_CSV`, and `DST_TIMESPAN`
+Set relevant input output files using `OUTPUT_DIR`, `OUTPUT_CSV`, and `DST_TIMESPAN`
 
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/maximum_altitude_change"
@@ -190,7 +245,7 @@ python starlink/altitude_change/for_intensity.py
 
 - Short duration events
 
-Set `OUTPUT_DIR`, `OUTPUT_CSV`, and `df_timespan`
+Set relevant input output files using `OUTPUT_DIR`, `OUTPUT_CSV`, and `df_timespan`
 
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/maximum_altitude_change"
@@ -207,7 +262,7 @@ python starlink/altitude_change/for_duration.py
 
 - Long duration events
 
-Set `OUTPUT_DIR`, `OUTPUT_CSV`, and `df_timespan`
+Set relevant input output files using `OUTPUT_DIR`, `OUTPUT_CSV`, and `df_timespan`
 
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/maximum_altitude_change"
@@ -225,6 +280,8 @@ python starlink/altitude_change/for_duration.py
 
 ### Measuring Solar Superstorm of May 2024
 
+Solar events can cause satellite anomalies, tracking errors, and increased drag for satellites in Low Earth Orbit (LEO). Measure the satellite tracking and drag information as follows:
+
 - Check for tracking anomaly
 
 ```bash
@@ -241,15 +298,26 @@ python starlink/superstorm/drag_anomaly.py
 
 ### Analysis of a few other satellites
 
+**CosmicDance** can be used for any satellites out of the box by following these steps:
+
 - [HawkEye_360](/HawkEye_360/)
 - [ISRO](/ISRO/)
 
 
-## Citation
+
+# License
+This work is licensed under the [MIT License](/LICENSE).
+
+
+# Cite this work
+
+## Plain text
 
 ```
 Basak, Suvam, et al. "CosmicDance: Measuring Low Earth Orbital Shifts Due to Solar Radiations" Proceedings of the ACM Internet Measurement conference. 2024.
 ```
+
+## BibTeX
 
 ```bibtex
 @inproceedings {CosmicDance,
@@ -260,3 +328,12 @@ Basak, Suvam, et al. "CosmicDance: Measuring Low Earth Orbital Shifts Due to Sol
     doi = {10.1145/3646547.3689024}
 }
 ```
+
+
+# Credits
+
+Contributors whose support and expertise have been invaluable in the development of **CosmicDance**:
+
+- [**Amitangshu Pal**](https://www.cse.iitk.ac.in/users/amitangshu/)
+- [**Debopam Bhattacherjee**](https://bdebopam.github.io)
+
