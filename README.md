@@ -20,15 +20,7 @@ A tool designed to analyze the impact of solar radiation on spaceborne infrastru
     - [Measuring Solar Superstorm of May 2024](#measuring-solar-superstorm-of-may-2024)
     - [Analysis of a few other satellites](#analysis-of-a-few-other-satellites)
 - [Citation](#citation)
-
-<!-- - [Orchestration](#orchestration)
-- [Orchestration Behind NAT](#orchestration-behind-nat)
-- [Service Templates](#service-templates)
-- [Node Types](#node-types)
-- [Relationship Types](#relationship-types)
-- [Supporting Repositories](#supporting-repositories)
-- [License](#license)
- -->
+- [License](https://github.com/suvambasak/CosmicDance?tab=MIT-1-ov-file)
 
 
 
@@ -45,6 +37,21 @@ sudo apt install curl
 
 ```bash
 conda env create -f dependencies/environment.yml
+```
+
+- Activate environment
+
+```bash
+conda deactivate && conda activate cosmicdance
+```
+
+- Add user credentials for [space-track](https://www.space-track.org/auth/createAccount) in [credentials/credentials_0.json](/credentials/credentials_0.json)
+
+```json
+{
+    "ID": "user@domain.com",
+    "PWD": "password"
+}
 ```
 
 - Set `CosmicDance` path
