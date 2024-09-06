@@ -151,13 +151,19 @@ python starlink/build_dataset/preprocess/TLEs/remove_orbit_raise_maneuver.py
 
 ### Timeseries
 
+The following steps map the multimodal datasets (solar activity and satellite orbital parameters) into a single time series using timestamps and identify abrupt changes in trajectory closely following a solar event:
+
 - Generate launch date (or satellite) wise time series plot of orbital parameters with intensity of solar activities
 
 ```bash
 python starlink/timeseries/view_timeseries_with_dst.py
 ```
 
-- Other time series plots in [notebook](/starlink/timeseries/timeseries_view.ipynb)
+- The satellite (NORAD catalog number 45059) experienced an altitude drop of approximately 100 km immediately following a high-intensity solar activity and also notice an increased decay rate after the solar superstorm of May'24. For additional time series plots, refer to the [notebook](/starlink/timeseries/timeseries_view.ipynb) and the output directory of `view_timeseries_with_dst.py`.
+
+<p align="center">
+<img src="docs/img/45059.png">
+</p>
 
 
 ### Type of orbital shifts
@@ -171,6 +177,7 @@ Set relevant input output files using `OUTPUT_DIR` and `EVENT_DATES_CSV`
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/quiet_day"
 EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/quiet_day/below_ptile_80.csv"
+DAYS = 15
 ```
 
 Execute the measurement script
@@ -186,6 +193,7 @@ Set relevant input output files using `OUTPUT_DIR` and `EVENT_DATES_CSV`
 ```python
 OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/merged_above_ptile_99/RAW"
 EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/percentile/merged_above_ptile_99.csv"
+DAYS = 30
 ```
 
 Execute the measurement script
@@ -200,7 +208,13 @@ python starlink/orbital_shifts/trace_altitude.py
 python starlink/orbital_shifts/detect_altitude_shifts.py
 ```
 
-- View the type of shifts in [notebook](/starlink/orbital_shifts/view_altitude_shift.ipynb)
+- Light sky-blue dotted lines represent the altitude changes of individual satellites. The thickness of the vertical red bars indicates the relative solar activity intensity compared to the first day. The thick green and dashed blue lines depict the 95th percentile and median altitude changes observed on that day, respectively. For more observations, refer to the [notebook](/starlink/orbital_shifts/view_altitude_shift.ipynb).
+
+
+<p align="center">
+<img src="docs/img/permanent_decay_2023-12-14.png">
+</p>
+
 
 ### Maximum altitude change
 
@@ -276,7 +290,16 @@ Execute the measurement script
 python starlink/altitude_change/for_duration.py
 ```
 
-- View maximum altitude change/drag distribution in [notebook](/starlink/altitude_change/view_change_distribution.ipynb)
+- Compare the distribution of altitude change and drag during low and high solar intensity periods. For detailed analysis, see the [notebook](/starlink/altitude_change/view_change_distribution.ipynb).
+
+<p align="center">
+<img src="docs/img/altitude_chnage_quiet_day.png" width="333">
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="docs/img/altitude_change_event_day.png" width="333">
+</p>
+
+
+
 
 ### Measuring Solar Superstorm of May 2024
 
