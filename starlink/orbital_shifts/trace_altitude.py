@@ -14,8 +14,8 @@ PARALLEL_MODE = True
 # OUTPUT FILE(s)
 # ------------------------------------------------------------------
 
-OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/quiet_day"
-# OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/merged_above_ptile_99/RAW"
+# OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/quiet_day"
+OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/merged_above_ptile_99/RAW"
 
 
 # ------------------------------------------------------------------
@@ -27,15 +27,15 @@ OUTPUT_DIR = "artifacts/OUTPUT/Starlink/measurement/track_altitude_change/quiet_
 # EVENT_DATES = [pd.to_datetime("2021-06-16"),]
 # EVENT_DATES = [pd.to_datetime("2024-03-03"),]
 
-EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/quiet_day/below_ptile_80.csv"
-# EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/percentile/merged_above_ptile_99.csv"
+# EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/quiet_day/below_ptile_80.csv"
+EVENT_DATES_CSV = "artifacts/OUTPUT/Starlink/timespans/percentile/merged_above_ptile_99.csv"
 
 # TLEs and DST files
 TLE_CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
 DST_CSV = "artifacts/DST/Dst_index.csv"
 
-DAYS = 15
-# DAYS = 30
+# DAYS = 15
+DAYS = 30
 
 # ------------------------------------------------------------------
 
