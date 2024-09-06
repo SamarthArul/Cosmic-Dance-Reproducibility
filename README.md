@@ -68,7 +68,15 @@ conda deactivate && conda activate cosmicdance
 - Export `CosmicDance` path in the shell. This will allow seamless execution of scripts.
 
 ```bash
-export PYTHONPATH=`COSMIC_DANCE_PATH`
+export PYTHONPATH=$(pwd)
+```
+
+OR
+
+For instance, if the repository is cloned at `/home/suvam/Projects/CosmicDance`
+
+```bash
+export PYTHONPATH="/home/suvam/Projects/CosmicDance"
 ```
 
 ## Measure orbital shifts
