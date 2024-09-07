@@ -303,17 +303,20 @@ def get_all_TLE_between_two_date(
     return None
 
 
-def get_merged_TLEs_from_all_CSVs(directory_name: str, epoch_date_type: bool = True, ldate_type: bool = True) -> pd.DataFrame:
+def get_merged_TLEs_from_all_CSVs(directory_name: str, epoch_date_type: bool = True, ldate_type: bool = True, epoch_mixed_format: bool = True) -> pd.DataFrame:
     '''Read TLEs from all CSV files in directory
 
     Params
     ------
     directory_name: str
         directory of CSV files (NORAD_CAT_ID.csv)
+
     epoch_date_type: bool, optional
         EPOCH date type (Default pd.Timestamp)
     ldate_type: bool, optional
         Launch date type (Default pd.Timestamp)
+    epoch_mixed_format: bool, optional
+        Epoch time format as 'mixed' (Default True)
 
     Returns
     -------
@@ -329,7 +332,7 @@ def get_merged_TLEs_from_all_CSVs(directory_name: str, epoch_date_type: bool = T
         _filename = f"{directory_name}/{file}"
         list_of_df.append(
             read_TLEs_in_CSV(
-                _filename, epoch_date_type, ldate_type
+                _filename, epoch_date_type, ldate_type, epoch_mixed_format
             )
         )
 
@@ -358,17 +361,20 @@ def read_orbit_raise_CSV(filename: str) -> pd.DataFrame:
     return df
 
 
-def read_TLEs_in_CSV(filename: str, epoch_date_type: bool = True, ldate_type: bool = True) -> pd.DataFrame:
+def read_TLEs_in_CSV(filename: str, epoch_date_type: bool = True, ldate_type: bool = True, epoch_mixed_format: bool = True) -> pd.DataFrame:
     '''Read TLEs from CSV file
 
     Params
     ------
     filename: str
         CSV file (NORAD_CAT_ID.csv)
+
     epoch_date_type: bool, optional
         EPOCH date type (Default pd.Timestamp)
     ldate_type: bool, optional
         Launch date type (Default pd.Timestamp)
+    epoch_mixed_format: bool, optional
+        Epoch time format as 'mixed' (Default True)
 
     Returns
     -------
@@ -381,7 +387,10 @@ def read_TLEs_in_CSV(filename: str, epoch_date_type: bool = True, ldate_type: bo
         df[TLE.LAUNCH_DATE] = pd.to_datetime(df[TLE.LAUNCH_DATE])
 
     if epoch_date_type:
-        df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH], format='mixed')
+        if epoch_mixed_format:
+            df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH], format='mixed')
+        else:
+            df[TLE.EPOCH] = pd.to_datetime(df[TLE.EPOCH])
 
     return df
 

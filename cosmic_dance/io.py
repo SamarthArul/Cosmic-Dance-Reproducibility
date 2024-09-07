@@ -252,6 +252,9 @@ def read_catalog_number_list(filename: str, in_order: bool = False) -> set[int] 
 
     catalog_number_set: set[int] = set()
 
+    if not os.path.isfile(filename):
+        return catalog_number_set
+
     with open(filename) as f:
         for id in f.read().strip().split('\n'):
             catalog_number_set.add(int(id))

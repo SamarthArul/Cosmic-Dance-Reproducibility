@@ -64,7 +64,10 @@ if __name__ == '__main__':
 
     # Reading CSVs
     df_nt = read_dst_index_CSV(DST_CSV)
-    df_tles = get_merged_TLEs_from_all_CSVs(TLE_CSV_DIR)
+    df_tles = get_merged_TLEs_from_all_CSVs(
+        TLE_CSV_DIR,
+        epoch_mixed_format=False
+    )
 
     # Filtering
     if START_DATE is not None or END_DATE is not None:

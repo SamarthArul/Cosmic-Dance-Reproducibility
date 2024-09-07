@@ -118,7 +118,7 @@ def plot_in_stack_with_nt(
         s=SIZE,
         c=df_tles[TLE.NORAD_CAT_ID]
     )
-    axs[1].set_ylim(250, 650)
+    # axs[1].set_ylim(250, 650)
 
     # Drag
     axs[2].scatter(
