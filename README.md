@@ -329,8 +329,9 @@ python starlink/superstorm/drag_anomaly.py
 
 ### Analysis of a few other satellites
 
-**CosmicDance** can be used for any satellites out of the box by following these steps:
+**CosmicDance** can be used out of the box for any satellites or constellations
 
+- [OneWeb](/OneWeb/)
 - [HawkEye_360](/HawkEye_360/)
 - [ISRO](/ISRO/)
 
