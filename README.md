@@ -32,11 +32,11 @@ A tool designed to analyze the impact of solar radiation on spaceborne infrastru
 ## Setting up
 Use the following steps to build **CosmicDance** environment.
 
-- Install dependencies
+<!-- - Install dependencies
 
 ```bash
 sudo apt install curl
-```
+``` -->
 
 - Create conda environment from `environment.yml`
 
@@ -60,8 +60,8 @@ conda deactivate && conda activate cosmicdance
 
 ```json
 {
-    "ID": "user@domain.com",
-    "PWD": "password"
+    "identity": "user@domain.com",
+    "password": "password"
 }
 ```
 

@@ -151,8 +151,7 @@ def CSV_logger(data: dict[str, float | int], csv_file_path: str = "log.csv"):
 
 
 def fetch_from_space_track_API(
-    email: str,
-    password: str,
+    session: requests.Session,
     NORAD_catalog_number: str,
     start_date: str,
     end_date: str,
@@ -162,10 +161,8 @@ def fetch_from_space_track_API(
 
     Params
     ------
-    email: str
-        space-track username(email)
-    password: str,
-        space-track password
+    session: requests.Session
+        space-track session
     NORAD_catalog_number: str
         NORAD Catalog Number of a satellite
     start_date: str
@@ -182,45 +179,20 @@ def fetch_from_space_track_API(
     '''
 
     try:
-        STATUS = os.system(
-            f"""curl https://www.space-track.org/ajaxauth/login -d 'identity={email}&password={password}&query=https://www.space-track.org/basicspacedata/query/class/gp_history/NORAD_CAT_ID/{NORAD_catalog_number}/orderby/TLE_LINE1%20ASC/EPOCH/{start_date}--{end_date}/format/json' > {output_dir}/{NORAD_catalog_number}.json"""
-        )
+        DATA_URL = f"https://www.space-track.org/basicspacedata/query/class/gp_history/NORAD_CAT_ID/{NORAD_catalog_number}/orderby/TLE_LINE1%20ASC/EPOCH/{start_date}--{end_date}/format/json"
+        response = session.get(DATA_URL)
 
     except Exception as e:
-        print(f"|- Exception: {str(e)}")
+        print(f"|- fetch_from_space_track_API: {str(e)}")
 
     finally:
-        # Check file size
-        if 0 == os.path.getsize(f"{output_dir}/{NORAD_catalog_number}.json"):
-            return False
-
-        # # Validate content
-        # with open(f'{dir}/{NORAD_catalog_number}.json') as json_file:
-
-        #     content = json.load(json_file)
-        #     if 0 == len(content):
-        #         return False
-
-        #     content = content[-1]
-
-        #     if 'error' in content:
-        #         print(f'Failed: {NORAD_catalog_number}')
-        #         print(f'ERROR: {content["error"]}')
-
-        #         # Wait
-        #         for t in range(200):
-        #             time.sleep(1)
-        #             print(t, end=', ')
-
-        #         return False
-
-        # CURL execution status
-        if 0 == STATUS:
-            print(f'Success: {NORAD_catalog_number}')
+        if response.ok:
+            write_to_file(
+                response.text,
+                f"{output_dir}/{NORAD_catalog_number}.json"
+            )
             return True
-        else:
-            print(f'Failed: {NORAD_catalog_number}')
-            return False
+        return False
 
 
 def read_credentials(filename_list: list[str]) -> list[dict[str, str]]:

@@ -10,6 +10,7 @@ from cosmic_dance.io import *
 G: float = 6.67408 * 10**(-11)
 M: float = 5.9722*(10**24)
 EARTH_RADIUS_M: float = 6378135.0
+LOGIN_URL = "https://www.space-track.org/ajaxauth/login"
 
 
 class TLE:
@@ -114,23 +115,52 @@ def download_TLEs(
         Download file directory
     '''
 
-    # Fetch TLEs using credentials
-    for id, catelog_number in enumerate(catelog_numbers):
-        username = credentials[id % len(credentials)].get('ID')
-        password = credentials[id % len(credentials)].get('PWD')
-
-        # Retry if failed
-        while fetch_from_space_track_API(username, password, catelog_number, start_date, end_date, output_dir) is False:
-            print(f"|- Error: {catelog_number}, waiting...")
-            time.sleep(30)
-
-        print(
-            f"|- Completed: {catelog_number}, Progress ({id+1}/{len(catelog_numbers)})"
+    # Authentication of credentials & creating sessions
+    sessions: list[requests.Session] = list()
+    for credential in credentials:
+        print(f"|- Creating session for: {credential.get('identity')}", end='')
+        _session = requests.Session()
+        _response = _session.post(
+            LOGIN_URL,
+            data={
+                "identity": credential.get('identity'),
+                "password": credential.get('password')
+            }
         )
+        if _response.ok:
+            print('\tDone.')
+            sessions.append(_session)
+        else:
+            print('\Faild.')
 
-        # Wating to stay under the request limit
-        if 0 == id % len(credentials):
-            time.sleep(30)
+    try:
+
+        # Fetch TLEs using sessions
+        for id, catelog_number in enumerate(catelog_numbers):
+            # username = credentials[id % len(credentials)].get('ID')
+            # password = credentials[id % len(credentials)].get('PWD')
+            session = sessions[id % len(sessions)]
+
+            # Retry if failed
+            while fetch_from_space_track_API(session, catelog_number, start_date, end_date, output_dir) is False:
+                print(f"|- Error: {catelog_number}, waiting...")
+                time.sleep(30)
+
+            print(
+                f"|- Completed: {catelog_number}, Progress ({id+1}/{len(catelog_numbers)})"
+            )
+
+            # Wating to stay under the request limit
+            if 0 == id % len(credentials):
+                time.sleep(30)
+
+    except KeyboardInterrupt:
+        print(f"|\n|- KeyboardInterrupt")
+
+    finally:
+        for id, session in enumerate(sessions):
+            session.close()
+            print(f"|- Session ({id+1}) closed.")
 
 
 def get_median_altitude(df: pd.DataFrame, end_date: pd.Timestamp = None) -> float:
