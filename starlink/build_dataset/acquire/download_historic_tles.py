@@ -24,7 +24,7 @@ CATELOG_NUMBER_FILE = "artifacts/NORAD_CAT_NUM/StarlinkCatIDs.txt"
 
 # TLE EPOCH start and end date
 START_DATE = '2020-01-01'
-END_DATA = '2024-08-01'
+END_DATA = '2024-12-01'
 
 
 CREDENTIALS = [

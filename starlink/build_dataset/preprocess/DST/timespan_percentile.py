@@ -46,6 +46,7 @@ for ptile, filename in [
     (95, DST_TIMESPAN_PTILE_95),
     (80, DST_TIMESPAN_PTILE_80)
 ]:
+    print(f'''percentile: {ptile}, {percentile(df_dst["nT"], ptile)}''')
     df = extract_timespan_above_nT_intensity(
         df_dst, percentile(df_dst["nT"], ptile)
     )

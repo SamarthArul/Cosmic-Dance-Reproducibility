@@ -82,13 +82,17 @@ urls = [
     "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202312/dst2312.for.request",
 
     # Year 2024
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202401/dst2401.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202402/dst2402.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202403/dst2403.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202404/dst2404.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202405/dst2405.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202406/dst2406.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202407/dst2407.for.request"
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202401/dst2401.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202402/dst2402.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202403/dst2403.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202404/dst2404.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202405/dst2405.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202406/dst2406.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202407/dst2407.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202408/dst2408.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202409/dst2409.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202410/dst2410.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202411/dst2411.for.request"
 ]
 
 

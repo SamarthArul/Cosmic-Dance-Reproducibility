@@ -131,7 +131,7 @@ def download_TLEs(
             print('\tDone.')
             sessions.append(_session)
         else:
-            print('\Faild.')
+            print('\tFaild.')
 
     try:
 
@@ -147,7 +147,7 @@ def download_TLEs(
                 time.sleep(30)
 
             print(
-                f"|- Completed: {catelog_number}, Progress ({id+1}/{len(catelog_numbers)})"
+                f"|- Completed: {catelog_number}, Progress ({id+1}/{len(catelog_numbers)})  {round(100*(id+1)/len(catelog_numbers),2)} %"
             )
 
             # Wating to stay under the request limit
