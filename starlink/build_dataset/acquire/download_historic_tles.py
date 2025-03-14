@@ -30,9 +30,7 @@ END_DATE = '2025-03-01'
 
 CREDENTIALS = [
     "credentials/credentials_1.json",
-    "credentials/credentials_2.json",
-    "credentials/credentials_3.json",
-    "credentials/credentials_4.json"
+    "credentials/credentials_2.json"
 ]
 
 # ------------------------------------------------------------------
