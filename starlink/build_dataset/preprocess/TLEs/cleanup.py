@@ -43,7 +43,7 @@ def clean_up(filename: str) -> None:
 
 if __name__ == "__main__":
 
-    PARALLEL_MODE = True
+    PARALLEL_MODE = False
 
     # ------------------------------------------------------------------
     # OUTPUT FILE(s)

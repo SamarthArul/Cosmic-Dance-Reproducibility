@@ -154,7 +154,7 @@ def detect_shift_type(filename: str):
 
 if __name__ == '__main__':
 
-    PARALLEL_MODE = True
+    PARALLEL_MODE = False
     # ------------------------------------------------------------------
     # OUTPUT FILE(s)
     # ------------------------------------------------------------------

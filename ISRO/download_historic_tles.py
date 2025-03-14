@@ -19,7 +19,14 @@ END_DATA = '2024-06-01'
 CREDENTIALS = [
     "credentials/credentials_1.json",
     "credentials/credentials_2.json",
-    "credentials/credentials_3.json"
+    "credentials/credentials_3.json",
+    "credentials/credentials_4.json",
+    "credentials/credentials_5.json",
+    "credentials/credentials_6.json",
+    "credentials/credentials_7.json",
+    "credentials/credentials_8.json",
+    "credentials/credentials_9.json",
+    "credentials/credentials_10.json"
 ]
 
 catelog_numbers = [

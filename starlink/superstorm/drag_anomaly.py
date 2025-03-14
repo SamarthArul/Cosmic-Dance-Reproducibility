@@ -7,7 +7,7 @@ from cosmic_dance.TLEs import *
 from cosmic_dance.measurement import generate_drag_insight
 
 
-PARALLEL_MODE = True
+PARALLEL_MODE = False
 
 # ------------------------------------------------------------------
 # OUTPUT FILE(s)

@@ -1,12 +1,12 @@
 '''
-Auto fetch all the Dst index value from Geomagnetic Equatorial Dst index Home Page: https://wdc.kugi.kyoto-u.ac.jp/dstdir/index.html
+Auto fetch all the Dst index values from the Geomagnetic Equatorial Dst index Home Page: 
+https://wdc.kugi.kyoto-u.ac.jp/dstdir/index.html
 
 - Fetch the raw text from the URLs
-- Parse wdc-like format
-- Creates DataFrame of hourly values (nT)
-- Export to CSV file
+- Parse WDC-like format
+- Create a DataFrame of hourly values (nT)
+- Export to a CSV file
 '''
-
 
 from cosmic_dance.dst_index import *
 from cosmic_dance.io import *
@@ -21,8 +21,7 @@ OUTPUT_FILE = "artifacts/DST/Dst_index.csv"
 # INPUT FILE(s)
 # ------------------------------------------------------------------
 
-
-# Month wise URLS
+# URLs for Jan 2024 - March 2025
 urls = [
 
     # Year 2020
@@ -81,7 +80,7 @@ urls = [
     "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202311/dst2311.for.request",
     "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202312/dst2312.for.request",
 
-    # Year 2024
+    # Year 2024 (Provisional & Realtime)
     "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202401/dst2401.for.request",
     "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202402/dst2402.for.request",
     "https://wdc.kugi.kyoto-u.ac.jp/dst_provisional/202403/dst2403.for.request",
@@ -92,12 +91,16 @@ urls = [
     "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202408/dst2408.for.request",
     "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202409/dst2409.for.request",
     "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202410/dst2410.for.request",
-    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202411/dst2411.for.request"
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202411/dst2411.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202412/dst2412.for.request",
+
+    # Year 2025 (Realtime)
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202501/dst2501.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202502/dst2502.for.request",
+    "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/202503/dst2503.for.request",
 ]
 
-
 # ------------------------------------------------------------------
-
 
 input(f"Confirm output file ({OUTPUT_FILE})? ")
 

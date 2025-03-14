@@ -269,21 +269,10 @@ def write_to_file(content: str, filename: str):
     print(f"|- Save file: {filename}")
 
 
-def fetch_from_url(url: str) -> str:
-    '''Read the content from the URL
-
-    Params
-    -------
-    url: str
-        Web URL
-
-    Returns
-    -------
-    str: content as string
-    '''
-
+def fetch_from_url(url):
     response = requests.get(url)
-    assert response.ok
+    if not response.ok:
+        return None
     return response.text
 
 

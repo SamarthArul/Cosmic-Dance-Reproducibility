@@ -7,7 +7,7 @@ from cosmic_dance.io import *
 from cosmic_dance.measurement import track_satellite_altitude_change
 from cosmic_dance.TLEs import *
 
-PARALLEL_MODE = True
+PARALLEL_MODE = False
 
 
 # ------------------------------------------------------------------

@@ -304,18 +304,6 @@ def read_dst_index_CSV(filename: str, abs_value: bool = True) -> pd.DataFrame:
 
 
 def parse_dst_index(urls: list[str]) -> pd.DataFrame:
-    '''Request content from the given URLs in given order and generates a Dataframe with timestamp and intensity (nT)
-
-    Params
-    -------
-    urls: list[str]
-        List of URLs, in order (month wise)
-
-    Returns
-    -------
-    pd.DataFrame: Dataframe of Dst index
-    '''
-
     dst_index_records = []
 
     for id, url in enumerate(urls):
@@ -323,10 +311,17 @@ def parse_dst_index(urls: list[str]) -> pd.DataFrame:
 
         # Fetch and parse the content
         content = fetch_from_url(url)
+        
+        # Check if fetch failed
+        if content is None:
+            # Extract date from URL for the message (e.g., "202407" from "dst2407.for.request")
+            date_str = url.split('/')[-2]  # Gets "202407" from the URL
+            print(f"Warning: Failed to get {date_str}'s data")
+            continue  # Skip to the next URL
+
         content = content.split('\n')[:-3]
 
         for line in content:
-
             # Extract Year, Month, Date
             yy = line[3:5]
             mm = line[5:7]

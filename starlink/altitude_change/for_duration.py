@@ -7,7 +7,7 @@ from cosmic_dance.io import *
 from cosmic_dance.measurement import maximum_altitude_difference
 from cosmic_dance.TLEs import *
 
-PARALLEL_MODE = True
+PARALLEL_MODE = False
 
 # ------------------------------------------------------------------
 # OUTPUT FILE(s)

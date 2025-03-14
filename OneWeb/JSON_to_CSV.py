@@ -3,7 +3,7 @@ import concurrent.futures
 from cosmic_dance.io import *
 from cosmic_dance.TLEs import *
 
-PARALLEL_MODE = True
+PARALLEL_MODE = False
 
 
 # ------------------------------------------------------------------

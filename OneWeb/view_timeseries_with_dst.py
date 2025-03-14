@@ -76,7 +76,7 @@ def plot_by_cat_id(df_nt: pd.DataFrame, df_tles: pd.DataFrame, cat_id: int):
 
 if __name__ == '__main__':
 
-    PARALLEL_MODE = True
+    PARALLEL_MODE = False
 
     # ------------------------------------------------------------------
     # OUTPUT FILE(s)

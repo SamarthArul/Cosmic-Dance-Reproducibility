@@ -45,7 +45,7 @@ def strip_orbit_raise_maneuver(filename: str, orbit_raise_df: pd.DataFrame):
 
 if __name__ == "__main__":
 
-    PARALLEL_MODE = True
+    PARALLEL_MODE = False
 
     # ------------------------------------------------------------------
     # OUTPUT FILE(s)
