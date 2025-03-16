@@ -1,5 +1,8 @@
 '''Measuring satellite drag anomalies and statistics over few days'''
+import sys
 
+# Add the project PATH
+sys.path.append('/Users/samartharul/Desktop/Northwestern/Winter 2025/CS445/CosmicDance')
 import concurrent.futures
 
 from cosmic_dance.io import *
@@ -26,7 +29,7 @@ POSITIVE_DRAG_OBSERVED_CSV = f"{OUTPUT_DIR}/positive_drag_observed.csv"
 TLE_DIR_CSV = "artifacts/OUTPUT/Starlink/TLEs"
 
 # Event start date and next observation days
-START_DATE = pd.to_datetime("2024-05-01 00:00:00")
+START_DATE = pd.to_datetime("2024-10-01 00:00:00")
 UPTO_NEXT_DAYS = 30
 
 # ------------------------------------------------------------------

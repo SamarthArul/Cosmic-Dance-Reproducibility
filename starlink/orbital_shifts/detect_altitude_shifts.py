@@ -8,6 +8,10 @@ Currently detects:
 - Permanent decay
 '''
 
+import sys
+
+# Add the project PATH
+sys.path.append('/Users/samartharul/Desktop/Northwestern/Winter 2025/CS445/CosmicDance')
 import concurrent.futures
 
 from cosmic_dance.dst_index import *

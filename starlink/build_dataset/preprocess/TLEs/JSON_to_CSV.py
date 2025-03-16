@@ -25,7 +25,7 @@ CSV_DIR = "artifacts/OUTPUT/Starlink/TLEs"
 # ------------------------------------------------------------------
 
 # JSON file Directory
-JSON_DIR = "artifacts/OUTPUT/Starlink/RAW_TLEs"
+JSON_DIR = "artifacts/OUTPUT/Starlink/RAW_TLEs_2"
 
 
 # ------------------------------------------------------------------
